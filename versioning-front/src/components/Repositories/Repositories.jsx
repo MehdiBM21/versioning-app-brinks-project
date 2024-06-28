@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Repository from './Repository';
-import { Button, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Button, Flex, Grid, GridItem, Text, useDisclosure } from '@chakra-ui/react';
 import { RiGitRepositoryCommitsLine } from 'react-icons/ri';
+import NewRepoModal from './NewRepoModal';
+import useShowToast from '../../hooks/useShowToast';
 
 const Repositories = () => {
   const [repositories, setRepositories] = useState([]);
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const showToast = useShowToast();
 
   useEffect(() => {
     const fetchRepositories = async () => {
@@ -43,6 +47,7 @@ const Repositories = () => {
           leftIcon={<RiGitRepositoryCommitsLine size={20}/>}
           size={"sm"}
           mt={2}
+          onClick={onOpen}
         >
           New
         </Button>
@@ -54,7 +59,9 @@ const Repositories = () => {
           </GridItem>
         ))}
       </Grid>
+      <NewRepoModal isOpen={isOpen} onClose={onClose}/>
       </Flex>
+      
   );
 };
 

@@ -12,11 +12,17 @@ import {
   import React, { useEffect, useState } from "react";
   import { FaRegFile } from "react-icons/fa";
   import { IoMdClose } from "react-icons/io";
+  import MonacoEditor from "@monaco-editor/react";
+// import { transformFiles } from "../../utils/transformFiles";
   
   const Files = (props) => {
     const [files, setFiles] = useState([]);
     const [selectedFilePath, setSelectedFilePath] = useState(null);
     const [selectedFileType, setSelectedFileType] = useState(null);
+    const [selectedFileName, setSelectedFileName] = useState(null);
+    // const [fileTree, setFileTree] = useState({});
+    // const [openFolders, setOpenFolders] = useState({});
+
     const [fileContent, setFileContent] = useState(null);
   
     const { colorMode } = useColorMode();
@@ -30,6 +36,8 @@ import {
             `http://localhost:8080/api/files/commit/${props.commitId}`
           );
           setFiles(response.data);
+        //   setFileTree(transformFiles(response.data));
+        //   console.log(fileTree);
         } catch (error) {
           console.error("Error fetching Files:", error);
         }
@@ -40,6 +48,8 @@ import {
   
     const handleFileClick = async (file) => {
       const fileExtension = file.fileName.split('.').pop().toLowerCase();
+  
+      setSelectedFileName(file.fileName);
   
       setSelectedFileType(fileExtension);
   
@@ -116,12 +126,15 @@ import {
           >
             <Flex alignItems={"center"} justifyContent={"space-between"}>
                 <Text fontSize={"xl"} fontWeight={"bold"} mb={3} >
-              File Content:
+              {selectedFileName} : 
             </Text>
             <IconButton icon={<IoMdClose size={20}/>} onClick={() => setSelectedFileType(null)} background={"red"}></IconButton>
             </Flex>
             
-            <Text whiteSpace={"pre-wrap"} >{fileContent}</Text>
+            <MonacoEditor defaultLanguage="html" whiteSpace={"pre-wrap"} value={fileContent} theme={switchMode("vs-dark", "light")} options={{
+         readOnly: true,
+        }}
+      ></MonacoEditor>
           </Box>
         )}
         {/* {selectedFileType &&selectedFileType != 'pdf' && !(['jpg', 'jpeg', 'png', 'gif'].includes(selectedFileType)) && (
@@ -152,15 +165,17 @@ import {
             overflowY={"scroll"}
 
           >
+            {/* PDF */}
               <Flex alignItems={"center"} justifyContent={"space-between"}>
                 <Text fontSize={"xl"} fontWeight={"bold"} mb={3}>
-              PDF:
+                {selectedFileName} :
             </Text>
             <IconButton icon={<IoMdClose size={20}/>} onClick={() => setSelectedFileType(null)} background={"red"}></IconButton>
             </Flex>
             <embed src={selectedFilePath} width="100%" height="600px" type="application/pdf" />
           </Box>
         )}
+        {/* Image */}
         {['jpg', 'jpeg', 'png', 'gif'].includes(selectedFileType) && selectedFilePath && (
           <Box
             mt={5}
@@ -173,7 +188,7 @@ import {
           >
               <Flex alignItems={"center"} justifyContent={"space-between"}>
                 <Text fontSize={"xl"} fontWeight={"bold"} mb={3}>
-              Image:
+                {selectedFileName} :
             </Text>
             <IconButton icon={<IoMdClose size={20}/>} onClick={() => setSelectedFileType(null)} background={"red"}></IconButton>
             </Flex>

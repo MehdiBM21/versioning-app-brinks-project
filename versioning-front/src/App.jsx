@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button, useColorMode } from '@chakra-ui/react'
 import PageLayout from './Layouts/PageLayout/PageLayout'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Repositories from './components/Repositories/Repositories'
 import Commits from './components/Commits/Commits'
 
@@ -13,6 +13,7 @@ function App() {
     <>
     <PageLayout>
       <Routes>
+      <Route path="/" element={<Navigate to="/repositories" />} />
       <Route path="/repositories" element={<Repositories/>} />
       <Route path="/commits/:depotId" element={<Commits/>} />
 </Routes>

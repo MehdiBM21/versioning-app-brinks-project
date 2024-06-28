@@ -1,13 +1,18 @@
-import { Button, Flex, Select, Text } from "@chakra-ui/react";
+import { Button, Flex, Select, Text, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RiGitRepositoryCommitsLine } from "react-icons/ri";
 import Files from "../Files/Files";
+import NewCommitModal from "./NewCommitModal";
+import useShowToast from "../../hooks/useShowToast";
 
 const Commits = () => {
   const { depotId } = useParams();
   const [commitId, setCommitId] = useState(-1);
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const showToast = useShowToast();
+
   console.log(depotId);
 
   const [commits, setCommits] = useState([]);
@@ -43,9 +48,11 @@ const Commits = () => {
         <Button
           background={"rgb(41,144,59)"}
           leftIcon={<RiGitRepositoryCommitsLine size={20} />}
+          onClick={onOpen}
         >
           Add a new Commit
         </Button>
+        <NewCommitModal isOpen={isOpen} onClose={onClose} depotId={depotId} />
       </Flex>
     );
   }
@@ -58,21 +65,31 @@ const Commits = () => {
         //   justifyContent={"center"}
         h={"100vh"}
         m={3}
-
       >
-        <Select
-          placeholder='Select a commit'
-          onChange={(e) => setCommitId(e.target.value)}
-          w={"20%"}
-          cursor={"pointer"}
-        >
-          {commits.map((commit) => (
-            <option value={commit?.id}>{commit?.message}</option>
-          ))}
-        </Select>
+        <Flex alignItems={"center"} gap={3}>
+          <Select
+            placeholder='Select a commit'
+            onChange={(e) => setCommitId(e.target.value)}
+            w={"20%"}
+            cursor={"pointer"}
+          >
+            {commits.map((commit) => (
+              <option value={commit?.id}>{commit?.message}</option>
+            ))}
+          </Select>
 
-        <Files commitId={commitId}/>
+          <Button
+          background={"rgb(41,144,59)"}
+          leftIcon={<RiGitRepositoryCommitsLine size={20} />}
+          onClick={onOpen}
+        >
+          Add 
+        </Button>
+        </Flex>
+
+        <Files commitId={commitId} />
       </Flex>
+      <NewCommitModal isOpen={isOpen} onClose={onClose} depotId={depotId} />
     </>
   );
 };
