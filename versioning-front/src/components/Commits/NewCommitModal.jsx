@@ -94,7 +94,7 @@ import {
                     <FormLabel>Files:</FormLabel>
                     <Input
                       type="file"
-                    //   webkitdirectory="true"
+                      webkitdirectory="true"
                       multiple
                       onChange={handleFileChange}
                     />

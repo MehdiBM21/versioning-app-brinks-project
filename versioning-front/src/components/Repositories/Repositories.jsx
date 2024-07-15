@@ -27,12 +27,29 @@ const Repositories = () => {
 
   if(repositories.length === 0) {
     return (
+      <>
+      <Flex alignItems={"center"} gap={3} ml={2}>
+      <Text fontWeight={"bold"} fontSize={"2xl"}>Repositories</Text>
+
+      <Button
+          background={"rgb(41,144,59)"}
+          leftIcon={<RiGitRepositoryCommitsLine size={20}/>}
+          size={"sm"}
+          mt={2}
+          onClick={onOpen}
+        >
+          New
+        </Button>
+      </Flex>
         <Flex alignItems={"center"} justifyContent={"center"} h={"100vh"}>
         <Text 
         fontSize={"2xl"}
         fontWeight={"bold"}
         textAlign={"center"}>No repositories found.</Text>
     </Flex>
+    <NewRepoModal isOpen={isOpen} onClose={onClose}/>
+
+      </>
 
     )
   }
