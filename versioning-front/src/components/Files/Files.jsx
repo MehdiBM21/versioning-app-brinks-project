@@ -195,7 +195,7 @@ const Files = (props) => {
         >
           <Flex alignItems={"center"} justifyContent={"space-between"}>
             <Text fontSize={"xl"} fontWeight={"bold"} mb={3}>
-              {selectedFileName} :
+              {selectedFileName} : 
             </Text>
             <IconButton icon={<IoMdClose size={20}/>} onClick={() => setSelectedFileType(null)} background={"red"}></IconButton>
           </Flex>
